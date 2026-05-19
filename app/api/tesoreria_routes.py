@@ -3,8 +3,13 @@ from fastapi import APIRouter
 from app.controllers.tesoreria_controller import (
     generar_reporte_deuda_controller,
     procesar_liquidacion_masiva_controller,
+    procesar_liquidacion_seleccionada_controller,
 )
-from app.models.pasarela_schemas import LiquidacionResponse, ReporteResponse
+from app.models.pasarela_schemas import (
+    LiquidacionResponse,
+    LiquidacionSeleccionRequest,
+    ReporteResponse,
+)
 
 router = APIRouter(prefix="", tags=["tesoreria"])
 
@@ -27,3 +32,15 @@ async def generar_reporte_deuda_endpoint(empresa_id: str) -> ReporteResponse:
 )
 async def procesar_liquidacion_masiva_endpoint() -> LiquidacionResponse:
     return await procesar_liquidacion_masiva_controller()
+
+
+@router.post(
+    "/liquidar/seleccion",
+    response_model=LiquidacionResponse,
+    summary="Liquidacion seleccionada",
+    description="Liquida solo las transacciones cuyos IDs se envian en el body.",
+)
+async def procesar_liquidacion_seleccionada_endpoint(
+    request: LiquidacionSeleccionRequest,
+) -> LiquidacionResponse:
+    return await procesar_liquidacion_seleccionada_controller(request)

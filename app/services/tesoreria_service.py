@@ -31,3 +31,10 @@ async def procesar_liquidacion_masiva() -> int:
         await transaccion_repo.liquidar_batch(transaccion_ids)
     logger.info("liquidacion_masiva", cantidad_liquidadas=len(transaccion_ids))
     return len(transaccion_ids)
+
+
+async def procesar_liquidacion_seleccionada(transaccion_ids: list[str]) -> int:
+    if transaccion_ids:
+        await transaccion_repo.liquidar_batch(transaccion_ids)
+    logger.info("liquidacion_seleccionada", cantidad_liquidadas=len(transaccion_ids))
+    return len(transaccion_ids)
