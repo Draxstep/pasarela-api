@@ -1,6 +1,9 @@
 import httpx
+import structlog
 
 from app.core.settings import settings
+
+logger = structlog.get_logger(__name__)
 
 
 async def solicitar_autorizacion_bancaria(
@@ -14,11 +17,13 @@ async def solicitar_autorizacion_bancaria(
     elif franquicia_normalizada == "nu":
         url = settings.nu_service_url
     else:
+        logger.info("franquicia_no_soportada", franquicia=franquicia)
         return {"status": "Error", "mensaje": "Franquicia no soportada"}
 
     try:
         async with httpx.AsyncClient() as client:
             if franquicia_normalizada == "nu":
+                logger.info("solicitud_nu", url=url, monto=monto)
                 payload = {
                     "number": datos_tarjeta.get("numero_tarjeta"),
                     "csv": datos_tarjeta.get("cvc"),
@@ -40,9 +45,11 @@ async def solicitar_autorizacion_bancaria(
                 if response.status_code == 400:
                     return {"status": "error", "mensaje": response.text.strip()}
                 response.raise_for_status()
+            logger.info("solicitud_banco", franquicia=franquicia, url=url, monto=monto)
             payload = {**datos_tarjeta, "monto": monto}
             response = await client.post(url, json=payload)
             response.raise_for_status()
             return response.json()
     except httpx.RequestError:
+        logger.error("error_conexion_banco", franquicia=franquicia, url=url)
         return {"status": "Error", "mensaje": "Error de conexion con el banco"}
