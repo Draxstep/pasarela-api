@@ -74,6 +74,14 @@ Variables en .env:
 }
 ```
 
+### LiquidacionSeleccionRequest
+
+```json
+{
+  "transaccion_ids": ["id1", "id2"]
+}
+```
+
 ## Endpoints
 
 ### POST /procesar-pago
@@ -130,6 +138,30 @@ Ejemplo:
 
 ```bash
 curl -X POST http://localhost:8000/liquidar/batch
+```
+
+### POST /liquidar/seleccion
+
+Liquida un conjunto de transacciones especificas por ID.
+
+Request: LiquidacionSeleccionRequest
+
+Response:
+
+```json
+{
+  "status": "ok",
+  "mensaje": "Liquidacion procesada",
+  "cantidad_liquidadas": 2
+}
+```
+
+Ejemplo:
+
+```bash
+curl -X POST http://localhost:8000/liquidar/seleccion \
+  -H "Content-Type: application/json" \
+  -d '{"transaccion_ids": ["id1", "id2"]}'
 ```
 
 ## Estados de transaccion

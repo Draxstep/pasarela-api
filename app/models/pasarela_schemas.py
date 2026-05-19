@@ -57,3 +57,11 @@ class LiquidacionResponse(BaseModel):
     cantidad_liquidadas: int = Field(
         ..., description="Cantidad de transacciones liquidadas", examples=[2]
     )
+
+
+class LiquidacionSeleccionRequest(BaseModel):
+    transaccion_ids: List[str] = Field(
+        ...,
+        description="IDs de transacciones a liquidar",
+        examples=[["id1", "id2"]],
+    )
