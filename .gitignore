@@ -216,3 +216,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# PocketBase
+pb_data/
+pb_data/data.db
+pb_data/backup/
+pb_data/logs/
+*.db
+*.db-journal
+
+# Repo-local scratch folder
+/~/
+
