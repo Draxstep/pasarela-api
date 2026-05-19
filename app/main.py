@@ -11,7 +11,25 @@ from app.core.logging import configure_logging
 configure_logging()
 logger = structlog.get_logger(__name__)
 
-app = FastAPI(title="Pasarela Pago Service", version="0.1.0")
+app = FastAPI(
+	title="Pasarela Pago Service",
+	version="1.0.0",
+	description=(
+		"API de pasarela de pagos y tesoreria. Permite procesar cobros, "
+		"consultar reportes de deuda y ejecutar liquidaciones masivas."
+	),
+	contact={"name": "Equipo Backend", "email": "backend@example.com"},
+	openapi_tags=[
+		{
+			"name": "gateway",
+			"description": "Orquestacion de cobros y validaciones de pago.",
+		},
+		{
+			"name": "tesoreria",
+			"description": "Reportes y liquidaciones de transacciones.",
+		},
+	],
+)
 
 
 @app.middleware("http")
