@@ -24,11 +24,8 @@ async def procesar_pago(request: PagoRequest) -> PagoResponse:
         }
     )
 
-    if request.numero_tarjeta.startswith("4"):
-        franquicia = "Visa"
-    elif request.numero_tarjeta.startswith("5"):
-        franquicia = "Mastercard"
-    else:
+    franquicia = request.franquicia.strip()
+    if franquicia.lower() not in {"visa", "mastercard", "nu"}:
         await transaccion_repo.actualizar_estado(transaccion_id, "Rechazado")
         return PagoResponse(
             status="Rechazado",

@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict
 class PagoRequest(BaseModel):
     id_idempotencia: str
     empresa_id: str
+    franquicia: str
     numero_tarjeta: str
     cvc: str
     fecha_expiracion: str
