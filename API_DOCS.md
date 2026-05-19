@@ -12,6 +12,8 @@ Variables en .env:
 - POCKETBASE_URL
 - VISA_SERVICE_URL
 - MASTERCARD_SERVICE_URL
+- NU_SERVICE_URL
+- NU_SERVICE_TOKEN
 
 ## Modelos
 
@@ -21,6 +23,7 @@ Variables en .env:
 {
   "id_idempotencia": "uuid-o-cadena",
   "empresa_id": "empresa_123",
+  "franquicia": "Visa",
   "numero_tarjeta": "4111111111111111",
   "cvc": "123",
   "fecha_expiracion": "12/28",
@@ -89,6 +92,7 @@ curl -X POST http://localhost:8000/procesar-pago \
   -d '{
     "id_idempotencia": "3b0d2b61-2f41-4f1a-8f66-4a3d2c1b8d7c",
     "empresa_id": "empresa_123",
+    "franquicia": "Visa",
     "numero_tarjeta": "4111111111111111",
     "cvc": "123",
     "fecha_expiracion": "12/28",
@@ -138,6 +142,6 @@ curl -X POST http://localhost:8000/liquidar/batch
 
 ## Notas
 
-- La franquicia se determina por el primer digito: 4 = Visa, 5 = Mastercard.
+- La franquicia se recibe en el request y debe ser Visa, Mastercard o Nu.
 - Los endpoints externos se llaman via httpx.AsyncClient desde el servicio.
 - Los errores de validacion o de negocio devuelven 400 cuando aplica.
