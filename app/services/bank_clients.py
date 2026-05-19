@@ -14,7 +14,7 @@ async def solicitar_autorizacion_bancaria(
     else:
         return {"status": "Error", "mensaje": "Franquicia no soportada"}
 
-    payload = {"datos_tarjeta": datos_tarjeta, "monto": monto}
+    payload = {**datos_tarjeta, "monto": monto}
 
     try:
         async with httpx.AsyncClient() as client:
