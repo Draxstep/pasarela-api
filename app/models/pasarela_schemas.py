@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class PagoRequest(BaseModel):
@@ -18,11 +18,19 @@ class PagoResponse(BaseModel):
     mensaje: str
 
 
-class LiquidacionBatchRequest(BaseModel):
-    transaccion_id: List[str]
+class TransaccionDetalle(BaseModel):
+    id: str
+    id_idempotencia: str | None = None
+    empresa_id: str | None = None
+    monto: float | None = None
+    estado: str | None = None
+    fecha: str | None = None
+
+    model_config = ConfigDict(extra="allow")
 
 
 class ReporteResponse(BaseModel):
     empresa_id: str
     total_deuda: float
     cantidad_transacciones: int
+    transacciones: List[TransaccionDetalle]

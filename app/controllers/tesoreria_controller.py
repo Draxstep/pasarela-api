@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 
-from app.models.pasarela_schemas import LiquidacionBatchRequest, ReporteResponse
+from app.models.pasarela_schemas import ReporteResponse
 from app.services.tesoreria_service import (
     generar_reporte_deuda,
     procesar_liquidacion_masiva,
@@ -17,12 +17,14 @@ async def generar_reporte_deuda_controller(empresa_id: str) -> ReporteResponse:
         ) from exc
 
 
-async def procesar_liquidacion_masiva_controller(
-    request: LiquidacionBatchRequest,
-) -> dict:
+async def procesar_liquidacion_masiva_controller() -> dict:
     try:
-        await procesar_liquidacion_masiva(request)
-        return {"status": "ok", "mensaje": "Liquidacion procesada"}
+        total = await procesar_liquidacion_masiva()
+        return {
+            "status": "ok",
+            "mensaje": "Liquidacion procesada",
+            "cantidad_liquidadas": total,
+        }
     except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
