@@ -4,7 +4,7 @@ from app.controllers.tesoreria_controller import (
     generar_reporte_deuda_controller,
     procesar_liquidacion_masiva_controller,
 )
-from app.models.pasarela_schemas import LiquidacionBatchRequest, ReporteResponse
+from app.models.pasarela_schemas import ReporteResponse
 
 router = APIRouter(prefix="", tags=["tesoreria"])
 
@@ -15,7 +15,5 @@ async def generar_reporte_deuda_endpoint(empresa_id: str) -> ReporteResponse:
 
 
 @router.post("/liquidar/batch")
-async def procesar_liquidacion_masiva_endpoint(
-    request: LiquidacionBatchRequest,
-) -> dict:
-    return await procesar_liquidacion_masiva_controller(request)
+async def procesar_liquidacion_masiva_endpoint() -> dict:
+    return await procesar_liquidacion_masiva_controller()

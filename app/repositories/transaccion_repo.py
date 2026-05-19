@@ -53,6 +53,16 @@ async def obtener_pendientes_por_empresa(empresa_id: str) -> List[Dict[str, Any]
         return data.get("items") or []
 
 
+async def obtener_pendientes_todas() -> List[Dict[str, Any]]:
+    url = f"{settings.pocketbase_url}/api/collections/transacciones/records"
+    params = {"filter": 'estado="No Liquidado"'}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        return data.get("items") or []
+
+
 async def liquidar_batch(transaccion_ids: List[str]) -> None:
     async with httpx.AsyncClient() as client:
         for transaccion_id in transaccion_ids:

@@ -1,4 +1,4 @@
-from app.models.pasarela_schemas import LiquidacionBatchRequest, ReporteResponse
+from app.models.pasarela_schemas import ReporteResponse
 from app.repositories import transaccion_repo
 
 
@@ -10,8 +10,13 @@ async def generar_reporte_deuda(empresa_id: str) -> ReporteResponse:
         empresa_id=empresa_id,
         total_deuda=total_deuda,
         cantidad_transacciones=cantidad_transacciones,
+        transacciones=pendientes,
     )
 
 
-async def procesar_liquidacion_masiva(request: LiquidacionBatchRequest) -> None:
-    await transaccion_repo.liquidar_batch(request.transaccion_id)
+async def procesar_liquidacion_masiva() -> int:
+    pendientes = await transaccion_repo.obtener_pendientes_todas()
+    transaccion_ids = [item.get("id") for item in pendientes if item.get("id")]
+    if transaccion_ids:
+        await transaccion_repo.liquidar_batch(transaccion_ids)
+    return len(transaccion_ids)

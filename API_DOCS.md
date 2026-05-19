@@ -38,11 +38,16 @@ Variables en .env:
 }
 ```
 
-### LiquidacionBatchRequest
+### TransaccionDetalle
 
 ```json
 {
-  "transaccion_id": ["id1", "id2", "id3"]
+  "id": "pb_transaccion_id",
+  "id_idempotencia": "idem-001",
+  "empresa_id": "empresa_123",
+  "monto": 100.5,
+  "estado": "No Liquidado",
+  "fecha": "2026-05-18T12:00:00Z"
 }
 ```
 
@@ -52,7 +57,17 @@ Variables en .env:
 {
   "empresa_id": "empresa_123",
   "total_deuda": 350.00,
-  "cantidad_transacciones": 3
+  "cantidad_transacciones": 3,
+  "transacciones": [
+    {
+      "id": "pb_transaccion_id",
+      "id_idempotencia": "idem-001",
+      "empresa_id": "empresa_123",
+      "monto": 100.5,
+      "estado": "No Liquidado",
+      "fecha": "2026-05-18T12:00:00Z"
+    }
+  ]
 }
 ```
 
@@ -95,25 +110,22 @@ curl http://localhost:8000/reportes/empresa_123
 
 ### POST /liquidar/batch
 
-Liquida una lista de transacciones y cambia su estado a "Liquidado".
-
-Request: LiquidacionBatchRequest
+Liquida todas las transacciones con estado "No Liquidado" en todo el sistema.
 
 Response:
 
 ```json
 {
   "status": "ok",
-  "mensaje": "Liquidacion procesada"
+  "mensaje": "Liquidacion procesada",
+  "cantidad_liquidadas": 2
 }
 ```
 
 Ejemplo:
 
 ```bash
-curl -X POST http://localhost:8000/liquidar/batch \
-  -H "Content-Type: application/json" \
-  -d '{"transaccion_id": ["id1", "id2"]}'
+curl -X POST http://localhost:8000/liquidar/batch
 ```
 
 ## Estados de transaccion
